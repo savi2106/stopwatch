@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    .container {
+      max-width: 400px;
+      margin-top: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container text-center">
+    <h1>Stopwatch</h1>
+    <div id="timer">00:00:00</div>
+    <br>
+    <button id="start" class="btn btn-primary">Start</button>
+    <button id="pause" class="btn btn-secondary">Pause</button>
+    <button id="restart" class="btn btn-danger">Restart</button>
+  </div>
+
+  <script>
+    let timerInterval;
+    let milliseconds = 0;
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+
+    function startTimer() {
+      timerInterval = setInterval(updateTimer, 10);
+      document.getElementById('start').disabled = true;
+      document.getElementById('pause').disabled = false;
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      document.getElementById('start').disabled = false;
+      document.getElementById('pause').disabled = true;
+    }
+
+    function restartTimer() {
+      clearInterval(timerInterval);
+      milliseconds = 0;
+      seconds = 0;
+      minutes = 0;
+      hours = 0;
+      document.getElementById('timer').textContent = '00:00:00';
+      document.getElementById('start').disabled = false;
+      document.getElementById('pause').disabled = true;
+    }
+
+    function updateTimer() {
+      milliseconds += 10;
+
+      if (milliseconds === 1000) {
+        milliseconds = 0;
+        seconds++;
+
+        if (seconds === 60) {
+          seconds = 0;
+          minutes++;
+
+          if (minutes === 60) {
+            minutes = 0;
+            hours++;
+          }
+        }
+      }
+
+      const formattedTime = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+      document.getElementById('timer').textContent = formattedTime;
+    }
+
+    function pad(value) {
+      return value < 10 ? '0' + value : value;
+    }
+
+    document.getElementById('start').addEventListener('click', startTimer);
+    document.getElementById('pause').addEventListener('click', pauseTimer);
+    document.getElementById('restart').addEventListener('click', restartTimer);
+  </script>
+</body>
+
+</html>
